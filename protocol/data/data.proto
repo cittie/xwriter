@@ -1,0 +1,43 @@
+syntax = "proto3";
+package pb;
+
+message XlsData {
+    DataInfo info = 1; // 写入信息
+
+    repeated RowData data = 7; // 写入内容
+}
+
+// DataInfo 表格的相关信息
+message DataInfo {
+    string project = 1; // 工程名称
+    string branch = 2; // 分支名称
+    string xls_file_name = 3; // xls文件基本名，不需要扩展名和路径
+    string xls_sheet_name = 4; // xls表名
+    int32 id_row_idx = 5; // 用于定位的id在表中哪一行
+}
+
+// RowData 单行数据
+message RowData {
+    repeated CellData data = 1;
+}
+
+// CellData 单个单元格数据
+message CellData {
+    string id = 1; // 匹配id
+    int32 id_idx = 2; // 匹配id的序号
+
+    string content = 7; // 写入内容
+}
+
+message GetXDataReq {
+    DataInfo info = 1;
+}
+
+message GetXDataResp {
+    XlsData data = 1;
+}
+
+service xDataService {
+    // 获取
+    rpc Get (GetXDataReq) returns (GetXDataResp) {}
+}
